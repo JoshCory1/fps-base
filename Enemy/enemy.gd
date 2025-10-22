@@ -7,6 +7,7 @@ const JUMP_VELOCITY = 4.5
 @export var attack_range := 1.5
 
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var player
 var provoked := false
@@ -32,7 +33,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		provoked = false
 	if distance < attack_range && provoked:
-		print("attacking player")
+		animation_player.play("Attack")
+	else:
+		animation_player.play("RESET")
 	if direction:
 		look_at_target(direction)
 		velocity.x = direction.x * SPEED
@@ -47,3 +50,6 @@ func look_at_target(direction: Vector3) -> void:
 	var adjusted_direction = direction
 	adjusted_direction.y = 0
 	look_at(global_position + adjusted_direction, Vector3.UP, true)
+	
+func attack() -> void:
+	print("Enemy Attack!!")

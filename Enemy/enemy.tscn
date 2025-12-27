@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://ds65hc8sgl24j"]
+[gd_scene load_steps=10 format=3 uid="uid://ds65hc8sgl24j"]
 
 [ext_resource type="Script" uid="uid://b078k4ur3cixk" path="res://Enemy/enemy.gd" id="1_2pb1h"]
+[ext_resource type="PackedScene" uid="uid://tub570lf4xft" path="res://Weapon/hitscan_weapon.tscn" id="2_px1sc"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xjnqo"]
 
@@ -132,3 +133,8 @@ mesh = SubResource("BoxMesh_2pb1h")
 libraries = {
 &"": SubResource("AnimationLibrary_am0pq")
 }
+
+[node name="HitscanWeapon" parent="." instance=ExtResource("2_px1sc")]
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0.04332894)

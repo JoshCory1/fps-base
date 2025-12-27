@@ -1,5 +1,5 @@
 extends CharacterBody3D
-
+class_name Player
 
 const SPEED = 5.0
 
@@ -7,9 +7,18 @@ const SPEED = 5.0
 @export var jump_hight := 1.0
 ##How fast the player falls
 @export var fall_multiplier := 2.5
+##Max hitpoins
+@export var max_hitpoints := 100
+
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var mouse_motion := Vector2.ZERO
+var hitpoints: int = max_hitpoints:
+	set(value):
+		hitpoints = value
+		print("Player hitpoits: " + str(hitpoints))
+		if hitpoints <= 0:
+			get_tree().quit()
 
 @onready var camera_pivot: Node3D = $CameraPivot
 

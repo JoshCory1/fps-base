@@ -8,19 +8,23 @@ extends Node3D
 @export var wepon_mesh: Node3D
 ##Damage of wepon
 @export var wepon_damage := 15
+##Muzzle flash of wepon
+@export var muzzle_flash: GPUParticles3D
+##Wepon sparking partical 
+@export var sparks: PackedScene
 
 @onready var ray_cast_3d: RayCast3D = $RayCast3D
 @onready var cooldown_timer: Timer = $CooldownTimer
-#var ray_cast_3d: RayCast3D
 
 var wepon_position: Vector3
+var spark_spowned := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if wepon_mesh:
+		if muzzle_flash:
+			muzzle_flash.lifetime = 1 / fire_rate
 		wepon_position = wepon_mesh.position
-	#if ray_cast_3d:
-		#ray_cast_3d = $RayCast3D
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -40,3 +44,14 @@ func shoot() -> void:
 			collider.hitpoints -= wepon_damage
 	if wepon_mesh:
 		wepon_mesh.position.z += recoil
+		if muzzle_flash:
+			muzzle_flash.restart()
+			var spark = sparks.instantiate()
+			print("SPARK SPAWNED ", Time.get_ticks_msec())
+			add_child(spark)
+			spark.global_position = ray_cast_3d.get_collision_point()
+			if spark.global_position != ray_cast_3d.get_collision_point():
+				spark.queue_free()
+			spark.start("Spark")
+
+	

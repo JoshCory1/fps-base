@@ -61,7 +61,8 @@ func _physics_process(delta: float) -> void:
 func look_at_target(direction: Vector3) -> void:
 	var adjusted_direction = direction
 	adjusted_direction.y = 0
-	look_at(global_position + adjusted_direction, Vector3.UP, true)
+	if direction:
+		look_at(global_position + adjusted_direction, Vector3.UP, true)
 	
 func attack() -> void:
 	var collider = ray_cast_3d.get_collider()

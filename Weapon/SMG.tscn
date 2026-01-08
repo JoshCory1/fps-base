@@ -1,17 +1,88 @@
-[gd_scene load_steps=3 format=3 uid="uid://c5tqqn8cqsman"]
+[gd_scene load_steps=9 format=3 uid="uid://c5tqqn8cqsman"]
 
 [ext_resource type="PackedScene" uid="uid://bwylilwtsftxv" path="res://Weapon/SMG.glb" id="1_0ne8a"]
 [ext_resource type="Script" uid="uid://cg58fxkmcsehp" path="res://Weapon/hitscan_weapon.gd" id="1_tkgdc"]
+[ext_resource type="PackedScene" uid="uid://wepgw8rb47e0" path="res://Weapon/sparks.tscn" id="2_gmofj"]
 
-[node name="SMG" type="Node3D" node_paths=PackedStringArray("wepon_mesh")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tkgdc"]
+albedo_color = Color(0.944659, 0.97363, 0.9990414, 1)
+emission_enabled = true
+emission = Color(0.9882353, 0.9529412, 0, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="Curve" id="Curve_tkgdc"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gmofj"]
+curve = SubResource("Curve_tkgdc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bm73w"]
+direction = Vector3(0, 0, -1)
+spread = 8.0
+initial_velocity_min = 6.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_gmofj")
+
+[sub_resource type="BoxMesh" id="BoxMesh_gmofj"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="SMG" type="Node3D" node_paths=PackedStringArray("wepon_mesh", "muzzle_flash")]
 script = ExtResource("1_tkgdc")
 wepon_mesh = NodePath("SMG")
+muzzle_flash = NodePath("MuzzleFlash")
+sparks = ExtResource("2_gmofj")
 
 [node name="CooldownTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="SMG" parent="." instance=ExtResource("1_0ne8a")]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.295, -0.235, -0.149)
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.295, -0.235, -0.5)
+
+[node name="Suppressors_003" parent="SMG" index="0"]
+layers = 2
+
+[node name="Part_024" parent="SMG" index="1"]
+layers = 2
+
+[node name="Rail_009" parent="SMG" index="2"]
+layers = 2
+
+[node name="Grip_017" parent="SMG" index="3"]
+layers = 2
+
+[node name="Charger_011" parent="SMG" index="4"]
+layers = 2
+
+[node name="Scope_016" parent="SMG" index="5"]
+layers = 2
+
+[node name="Part_029" parent="SMG" index="6"]
+layers = 2
+
+[node name="Part_030" parent="SMG" index="7"]
+layers = 2
+
+[node name="Gun butt_012" parent="SMG" index="8"]
+layers = 2
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -100)
+
+[node name="MuzzleFlash" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2981404, -0.19124168, -1.3899922)
+layers = 2
+material_override = SubResource("StandardMaterial3D_tkgdc")
+cast_shadow = 0
+emitting = false
+sub_emitter = NodePath(".")
+lifetime = 0.06999999999999999
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_bm73w")
+draw_pass_1 = SubResource("BoxMesh_gmofj")
+
+[editable path="SMG"]

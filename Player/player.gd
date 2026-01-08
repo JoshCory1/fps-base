@@ -9,18 +9,23 @@ const SPEED = 5.0
 @export var fall_multiplier := 2.5
 ##Max hitpoins
 @export var max_hitpoints := 100
-
+##Multiply the speed of player
+@export var speed_multiplier := 1.0
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var mouse_motion := Vector2.ZERO
 var hitpoints: int = max_hitpoints:
 	set(value):
+		if value < hitpoints:
+			damage_animation_player.stop(false)
+			damage_animation_player.play("takeDamage")
 		hitpoints = value
 		print("Player hitpoits: " + str(hitpoints))
 		if hitpoints <= 0:
 			get_tree().quit()
 
 @onready var camera_pivot: Node3D = $CameraPivot
+@onready var damage_animation_player: AnimationPlayer = $DamageTexture/DamageAnimationPlayer
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -44,11 +49,11 @@ func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * SPEED * speed_multiplier
+		velocity.z = direction.z * SPEED * speed_multiplier
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, SPEED * speed_multiplier)
+		velocity.z = move_toward(velocity.z, 0, SPEED * speed_multiplier)
 
 	move_and_slide()
 
